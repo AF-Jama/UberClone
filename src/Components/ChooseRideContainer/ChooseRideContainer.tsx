@@ -25,7 +25,7 @@ interface Props{
 const ChooseRideContainer:React.FC = ()=>{
     const [pickUpQuery,setPickUpQuery] = useState<string>(''); // set query state
     const [destinationQuery,setDestinationQuery] = useState<string>(''); // set query state
-    // const { isLoading, error, data } = useQuery<LocationResult,Error>({queryFn:()=>fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=a&key=AIzaSyDx7emY8p2Zwg94IkYcfI0nhMnmlTneg7c`).then(res=>res.json()),queryKey:[]});
+    // const { isLoading, error, data } = useQuery<LocationResult,Error>({queryFn:()=>fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=a&key=`).then(res=>res.json()),queryKey:[]});
     
     // console.log(data);
     
