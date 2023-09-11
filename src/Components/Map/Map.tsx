@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker, DirectionsRendererProps, DirectionsRenderer } from '@react-google-maps/api';
+import { Maven_Pro } from 'next/font/google';
 
 const containerStyle = {
     width: '100%',
@@ -16,14 +17,6 @@ const center = {
 interface Props{
   map:google.maps.Map|null,
   setMap:React.Dispatch<React.SetStateAction<google.maps.Map|null>>,
-  loc:{
-    lat:number,
-    lng:number,
-  }
-  setLoc:React.Dispatch<React.SetStateAction<{
-    lat:number,
-    lng:number,
-  }>>,
   pickUpLat:{
     lat:number,
     lng:number,
@@ -31,13 +24,14 @@ interface Props{
   destinationLat:{
     lat:number,
     lng:number,
-  }|null
+  }|null,
+  directionResult:google.maps.DirectionsResult|null,
 
 }
 
 
 
-const Map:React.FC<Props> = ({ map, setMap, loc, setLoc, pickUpLat, destinationLat })=>{
+const Map:React.FC<Props> = ({ map, setMap, pickUpLat, destinationLat, directionResult })=>{
 
     //   const onLoad = React.useCallback(function callback(map) {
     //     // This is just an example of getting and using the map instance!!! don't just blindly copy!
@@ -51,20 +45,23 @@ const Map:React.FC<Props> = ({ map, setMap, loc, setLoc, pickUpLat, destinationL
     //     setMap(null)
     //   }, [])
 
-    useEffect(()=>{
-      setTimeout(()=>{
-        setLoc({
-          lat:52.4486,
-          lng:-2.0494,
-        })
-      },1000)
-    },[])
+    // useEffect(()=>{
+    //   setTimeout(()=>{
+    //     setLoc({
+    //       lat:52.4486,
+    //       lng:-2.0494,
+    //     })
+    //   },1000)
+    // },[])
 
 
     return (
       <GoogleMap
       mapContainerStyle={containerStyle}
-      center={loc}
+      center={{
+        lat:52.4486,
+        lng:-2.0494,
+      }}
       zoom={10}            
       options={
         {
@@ -77,9 +74,15 @@ const Map:React.FC<Props> = ({ map, setMap, loc, setLoc, pickUpLat, destinationL
       onLoad={map=>setMap(map)}
     >
       { /* Child components, such as markers, info windows, etc. */ }
-      <Marker position={pickUpLat}/>
-      <Marker position={destinationLat}/>
-      <button className='text-red-500 '>SUCCESFULL</button>
+      {
+        pickUpLat && <Marker position={pickUpLat}/>
+      }
+      {
+        destinationLat && <Marker position={destinationLat}/>
+      }
+      {
+        directionResult && <DirectionsRenderer directions={directionResult}/>
+      }
     </GoogleMap>
     )
 }

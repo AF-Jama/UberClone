@@ -32,7 +32,7 @@ const ChooseRideContainer:React.FC = ()=>{
     
     // useEffect(()=>{
     //     const fetchData = async ()=>{
-    //         let res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=a&key=AIzaSyDx7emY8p2Zwg94IkYcfI0nhMnmlTneg7c`);
+    //         let res = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=a&key=`);
 
     //         res = await res.json();
 

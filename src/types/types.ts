@@ -6,3 +6,11 @@ export interface LocationResult{
         name:string,
     }[]
 }
+
+
+export interface LocationData{
+    addressName:string,
+    lat:number,
+    lng:number,
+    placeId:string,   
+}
