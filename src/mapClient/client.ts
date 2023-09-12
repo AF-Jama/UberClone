@@ -1,8 +1,8 @@
-import {Client} from "@googlemaps/google-maps-services-js";
+// import {Client} from "@googlemaps/google-maps-services-js";
 
 
-const client = new Client({});
+// const client = new Client({});
 
 
 
-export default client;
+// export default client;

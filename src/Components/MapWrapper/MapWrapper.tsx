@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from 'next/navigation'
 import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
+import { DirectionsService } from "@react-google-maps/api";
 import { LocationData } from "@/types/types";
 import reCenter from '../../assets/images/center.png';
 import location from '../../assets/images/destination.png';
@@ -86,8 +87,8 @@ const MapWrapper = ()=>{
 
 
       useEffect(()=>{
-
-        const fetchDrivingRoute = async (originData:LocationData,destinationData:LocationData)=>{
+          
+          const fetchDrivingRoute = async (originData:LocationData,destinationData:LocationData)=>{
             const directionService = new google.maps.DirectionsService();
             const distanceMatrix = new google.maps.DistanceMatrixService();
 
@@ -95,12 +96,14 @@ const MapWrapper = ()=>{
                 origins:[originData.addressName],
                 destinations:[destinationData.addressName],
                 travelMode:google.maps.TravelMode.DRIVING,
+                unitSystem:google.maps.UnitSystem.IMPERIAL,
             })
 
             const directionResult = await directionService.route({
                 origin:originData.addressName,
                 destination:destinationData.addressName,
                 travelMode:google.maps.TravelMode.DRIVING,
+                unitSystem:google.maps.UnitSystem.IMPERIAL
             })
 
             setDirectionResult(directionResult);
@@ -112,19 +115,19 @@ const MapWrapper = ()=>{
 
             let originData = JSON.parse(pickUpData);
             let destinationData = JSON.parse(dropData);
-
+            
             fetchDrivingRoute(originData,destinationData);
         }
+    
 
-      },[pickUpData,dropData])
+      },[pickUpData,dropData,isLoaded])
 
       console.log(directionResult);
-      console.log()
 
     return (
         <>
 
-        <div id="map-container" className="h-[44vh] border border-r-red-600 md:fixed md:inset-x-0 md:inset-y-0 md:h-auto">
+        <div id="map-container" className="h-[44vh] md:fixed md:inset-x-0 md:inset-y-0 md:h-auto">
             {isLoaded? <Map map={map} setMap={setMap} pickUpLat={pickUpCoords} destinationLat={destinationCoords} directionResult={directionResult}/>:<p>Loading Map</p>}
         </div>
 
@@ -137,7 +140,9 @@ const MapWrapper = ()=>{
                 <h2 className={`text-xl text-black font-bold`}>Where can we pick you up</h2>
 
                 {
-                    directionResult && distanceMatrix?
+                    directionResult && distanceMatrix
+                    
+                    ?
 
                     <div>
                         <div className="">
@@ -149,10 +154,10 @@ const MapWrapper = ()=>{
                             </div>
                         </div>
 
-                        <div id="car-type-container" className={`grid grid-col-1 gap-3 h-72 overflow-y-scroll ${styles['no-scrollbar']}`}>
+                        <div id="car-type-container" className={`grid grid-col-1 gap-3 h-60 overflow-y-scroll ${styles['no-scrollbar']}`}>
                             {
                                 carData.map(element=>(
-                                    <ChooseCar title={element.title} description={element.description} image={element.image} price={distanceMatrix.rows[0].elements[0].duration.value*SURGE_CHARGE_RATE} multiplier={element.multiplier} distance={distanceMatrix.rows[0].elements[0].distance.text} duration={distanceMatrix.rows[0].elements[0].duration.value} surcharge={SURGE_CHARGE_RATE}/>
+                                    <ChooseCar title={element.title} description={element.description} image={element.image} price={distanceMatrix.rows[0].elements[0].duration.value*SURGE_CHARGE_RATE} multiplier={element.multiplier} distance={distanceMatrix.rows[0].elements[0].distance.text} duration={distanceMatrix.rows[0].elements[0].duration.value} surcharge={SURGE_CHARGE_RATE} key={element.id}/>
                                 ))
                             }
                         </div>
@@ -177,7 +182,9 @@ const MapWrapper = ()=>{
 
                 }
 
-                <button className="w-full px-4 py-2 bg-black text-white rounded-md" onClick={addLocationMarker}>Find Ride</button>
+                {
+                    directionResult?<button className="w-full px-4 py-2 bg-black text-white rounded-md" onClick={addLocationMarker}>Select Car Type</button>:<button className="w-full px-4 py-2 bg-black text-white rounded-md" onClick={addLocationMarker}>Find Ride</button>
+                }
             </div>
         }
 

@@ -7,7 +7,6 @@ import location from '../../assets/images/destination.png';
 import ChooseCar from '../ChooseCar/ChooseCar';
 import Image from 'next/image';
 import { LocationResult } from '@/types/types';
-import client from '@/mapClient/client';
 import styles from '../../styles/global.module.css';
 
 
